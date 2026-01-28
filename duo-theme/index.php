@@ -47,23 +47,21 @@
                 <?php wp_nonce_field('duo_lead_form', 'duo_nonce'); ?>
 
                 <div class="form-group">
-                    <label for="lead-name">Imię</label>
                     <input
                         type="text"
                         id="lead-name"
                         name="lead_name"
-                        placeholder="Twoje imię"
+                        placeholder="IMIĘ"
                         required
                     >
                 </div>
 
                 <div class="form-group">
-                    <label for="lead-email">Email</label>
                     <input
                         type="email"
                         id="lead-email"
                         name="lead_email"
-                        placeholder="twoj@email.com"
+                        placeholder="EMAIL"
                         required
                     >
                 </div>
