@@ -1,11 +1,1 @@
-<!--
-    PLACEHOLDER - Zastąp ten plik właściwym logo Duo w formacie SVG
-    Zalecane wymiary: szerokość 200px
--->
-<svg width="200" height="80" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-          font-family="Helvetica, Arial, sans-serif" font-size="48" font-weight="700"
-          fill="#ffffff" letter-spacing="8">
-        DUO
-    </text>
-</svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" width="190.06" height="70.22" viewBox="0 0 190.06 70.22"><defs><style>.cls-1{fill:#fff;}</style></defs><path class="cls-1" d="M0,0h29.3c19.02,0,31.79,13.74,31.79,34.77,0,12.1-4.23,21.8-11.91,27.66-5.38,4.03-12.29,6.24-20.94,6.24H0V0ZM26.99,54.37c11.14,0,16.91-7.01,16.91-19.59s-6.05-20.56-16.71-20.56h-10.18v40.15h9.99Z"/><path class="cls-1" d="M66.37,51.77V19.5h15.56v29.01c0,5.38,2.4,8.36,7.4,8.36,5.38,0,8.65-4.03,8.65-9.89v-27.47h15.66v49.18h-14.98v-6.05h-.29c-3.55,4.8-7.88,7.49-14.7,7.49-11.33,0-17.29-7.4-17.29-18.35Z"/><path class="cls-1" d="M118.91,44.18c0-14.79,10.57-26.03,26.32-26.03s26.22,11.24,26.22,26.03-10.37,26.03-26.22,26.03-26.32-11.24-26.32-26.03ZM155.6,44.18c0-8.93-3.65-14.98-10.47-14.98s-10.37,6.05-10.37,14.98,3.55,14.89,10.37,14.89,10.47-5.96,10.47-14.89Z"/><circle class="cls-1" cx="181.16" cy="61.32" r="8.89"/></svg>
