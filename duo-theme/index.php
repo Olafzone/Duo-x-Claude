@@ -22,14 +22,7 @@
 
         <!-- Logo -->
         <header class="logo-container">
-            <?php
-            $logo_path = get_template_directory() . '/assets/images/logo.svg';
-            if (file_exists($logo_path)) : ?>
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.svg" alt="<?php bloginfo('name'); ?>" class="logo">
-            <?php else : ?>
-                <!-- Placeholder - zamień na właściwe logo SVG -->
-                <div class="logo-placeholder">DUO</div>
-            <?php endif; ?>
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.svg" alt="<?php bloginfo('name'); ?>" class="logo">
         </header>
 
         <!-- Opis działalności -->
@@ -51,7 +44,7 @@
                         type="text"
                         id="lead-name"
                         name="lead_name"
-                        placeholder="IMIĘ"
+                        placeholder="Imię"
                         required
                     >
                 </div>
@@ -61,7 +54,7 @@
                         type="email"
                         id="lead-email"
                         name="lead_email"
-                        placeholder="EMAIL"
+                        placeholder="Email"
                         required
                     >
                 </div>

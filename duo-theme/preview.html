@@ -69,7 +69,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding: 60px 40px;
+            padding: 40px 40px 2vh;
             position: relative;
             z-index: 1;
         }
@@ -84,13 +84,6 @@
         .logo-container svg {
             max-width: 200px;
             height: auto;
-        }
-
-        .logo-placeholder {
-            font-size: 72px;
-            font-weight: 700;
-            letter-spacing: 8px;
-            text-transform: uppercase;
         }
 
         /* Sekcja opisu */
@@ -109,33 +102,35 @@
 
         /* Formularz leadów */
         .lead-form-section {
-            max-width: 400px;
-            margin-left: 20px;
+            width: 360px;
+            margin-top: auto;
+            align-self: flex-end;
+            margin-right: 2vw;
         }
 
         .lead-form {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .form-group input {
-            padding: 20px 24px;
-            font-size: 14px;
+            width: 100%;
+            padding: 18px 24px;
+            font-size: 15px;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-weight: 400;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.8);
             color: #ffffff;
-            border-radius: 0;
+            border-radius: 6px;
             transition: all 0.3s ease;
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 1px;
         }
 
         .form-group input:focus {
@@ -145,19 +140,18 @@
         }
 
         .submit-btn {
-            padding: 15px 40px;
-            font-size: 16px;
+            width: 100%;
+            padding: 18px 40px;
+            font-size: 15px;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            letter-spacing: 1px;
             background: #ffffff;
             color: #000000;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
         }
 
         .submit-btn:hover {
@@ -190,15 +184,11 @@
         /* Responsywność */
         @media (max-width: 768px) {
             .main-container {
-                padding: 40px 20px;
+                padding: 30px 20px 2vh;
             }
 
             .logo-container {
-                margin-bottom: 50px;
-            }
-
-            .logo-placeholder {
-                font-size: 48px;
+                margin-bottom: 40px;
             }
 
             .description-section {
@@ -211,19 +201,9 @@
             }
 
             .lead-form-section {
-                margin-left: 0;
-                max-width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-placeholder {
-                font-size: 36px;
-                letter-spacing: 4px;
-            }
-
-            .description-section p {
-                font-size: 15px;
+                width: 100%;
+                align-self: stretch;
+                margin-right: 0;
             }
         }
     </style>
@@ -242,9 +222,7 @@
 
         <!-- Logo -->
         <header class="logo-container">
-            <!-- Zamień na właściwe logo SVG -->
-            <div class="logo-placeholder">DUO</div>
-            <!-- lub użyj: <img src="assets/images/logo.svg" alt="Duo" class="logo"> -->
+            <img src="assets/images/logo.svg" alt="Duo" class="logo">
         </header>
 
         <!-- Opis działalności -->
@@ -264,7 +242,7 @@
                         type="text"
                         id="lead-name"
                         name="lead_name"
-                        placeholder="IMIĘ"
+                        placeholder="Imię"
                         required
                     >
                 </div>
@@ -274,7 +252,7 @@
                         type="email"
                         id="lead-email"
                         name="lead_email"
-                        placeholder="EMAIL"
+                        placeholder="Email"
                         required
                     >
                 </div>
