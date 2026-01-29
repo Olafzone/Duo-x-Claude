@@ -87,8 +87,26 @@ body {
 /* Sekcja opisu */
 .description-section {
     max-width: 600px;
-    margin-left: 20px;
+    margin-left: 0;
+    margin-bottom: 30px;
+}
+
+/* Instagram */
+.instagram-link {
+    display: inline-block;
+    margin-left: 0;
     margin-bottom: 60px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.instagram-link:hover {
+    opacity: 1;
+}
+
+.instagram-link svg {
+    width: 24px;
+    height: 24px;
 }
 
 .description-section p {
@@ -100,10 +118,10 @@ body {
 
 /* Formularz leadów */
 .lead-form-section {
-    width: 360px;
+    width: 720px;
     margin-top: auto;
     align-self: flex-end;
-    margin-right: 2vw;
+    margin-right: 0;
 }
 
 .lead-form {

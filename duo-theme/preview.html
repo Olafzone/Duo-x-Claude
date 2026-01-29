@@ -89,8 +89,26 @@
         /* Sekcja opisu */
         .description-section {
             max-width: 600px;
-            margin-left: 20px;
+            margin-left: 0;
+            margin-bottom: 30px;
+        }
+
+        /* Instagram */
+        .instagram-link {
+            display: inline-block;
+            margin-left: 0;
             margin-bottom: 60px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .instagram-link:hover {
+            opacity: 1;
+        }
+
+        .instagram-link svg {
+            width: 24px;
+            height: 24px;
         }
 
         .description-section p {
@@ -102,10 +120,10 @@
 
         /* Formularz leadów */
         .lead-form-section {
-            width: 360px;
+            width: 720px;
             margin-top: auto;
             align-self: flex-end;
-            margin-right: 2vw;
+            margin-right: 0;
         }
 
         .lead-form {
@@ -233,6 +251,15 @@
                 Razem przekształcimy Twoją wizję w rzeczywistość.
             </p>
         </section>
+
+        <!-- Instagram -->
+        <a href="https://instagram.com/duo" target="_blank" rel="noopener noreferrer" class="instagram-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="20" height="20" rx="5" stroke="#ffffff" stroke-width="1.5"/>
+                <circle cx="12" cy="12" r="5" stroke="#ffffff" stroke-width="1.5"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="#ffffff"/>
+            </svg>
+        </a>
 
         <!-- Formularz leadów -->
         <section class="lead-form-section">
