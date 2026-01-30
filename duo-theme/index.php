@@ -43,6 +43,11 @@
             </svg>
         </a>
 
+        <!-- Linia łącząca -->
+        <svg class="connector-line" xmlns="http://www.w3.org/2000/svg">
+            <line id="connector" stroke="rgba(255,255,255,0.8)" stroke-width="1"/>
+        </svg>
+
         <!-- Formularz leadów -->
         <section class="lead-form-section">
             <form class="lead-form" id="duo-lead-form" method="post" action="">
@@ -77,6 +82,32 @@
     </main>
 
     <script>
+    function updateConnector() {
+        var container = document.querySelector('.main-container');
+        var igLink = document.querySelector('.instagram-link');
+        var form = document.querySelector('.lead-form-section');
+        var line = document.getElementById('connector');
+
+        if (!container || !igLink || !form || !line) return;
+
+        var cRect = container.getBoundingClientRect();
+        var igRect = igLink.getBoundingClientRect();
+        var fRect = form.getBoundingClientRect();
+
+        var x1 = igRect.left - cRect.left;
+        var y1 = igRect.bottom - cRect.top;
+        var x2 = fRect.right - cRect.left;
+        var y2 = fRect.top - cRect.top;
+
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+    }
+
+    window.addEventListener('load', updateConnector);
+    window.addEventListener('resize', updateConnector);
+
     document.getElementById('duo-lead-form').addEventListener('submit', function(e) {
         e.preventDefault();
 
