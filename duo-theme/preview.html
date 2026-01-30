@@ -321,10 +321,11 @@
         var igRect = igLink.getBoundingClientRect();
         var fRect = form.getBoundingClientRect();
 
+        var gap = 40;
         var x1 = igRect.left - cRect.left;
-        var y1 = igRect.bottom - cRect.top;
+        var y1 = igRect.bottom - cRect.top + gap;
         var x2 = fRect.right - cRect.left;
-        var y2 = fRect.top - cRect.top;
+        var y2 = fRect.top - cRect.top - gap;
 
         line.setAttribute('x1', x1);
         line.setAttribute('y1', y1);
