@@ -234,3 +234,467 @@ body {
         margin-right: 0;
     }
 }
+
+/* ============================================================================
+   ANKIETA - Social Media Confessions
+   ============================================================================ */
+
+.ankieta-page {
+    background: #0a0a0a;
+}
+
+/* Tło ze zdjęciem */
+.ankieta-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-image: url('assets/images/ankieta-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.ankieta-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Główny kontener */
+.ankieta-container {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    padding-bottom: 80px;
+}
+
+/* Honeypot - ukryty */
+.ankieta-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Ekrany */
+.ankieta-screen {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ankieta-screen.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Zawartość ekranu */
+.ankieta-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 700px;
+}
+
+/* Tytuły */
+.ankieta-title {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 30px;
+    line-height: 1.1;
+}
+
+.ankieta-subtitle {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 50px;
+}
+
+/* Pytanie */
+.ankieta-question-header {
+    margin-bottom: 20px;
+}
+
+.ankieta-question-number {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+.ankieta-question-text {
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 40px;
+}
+
+/* Textarea */
+.ankieta-textarea-wrapper {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.ankieta-textarea {
+    width: 100%;
+    min-height: 100px;
+    max-height: 200px;
+    padding: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    resize: none;
+    transition: border-color 0.3s ease;
+}
+
+.ankieta-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.ankieta-textarea:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.ankieta-char-count {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 12px;
+    opacity: 0.4;
+}
+
+/* Star rating */
+.ankieta-rating {
+    margin-bottom: 30px;
+}
+
+.ankieta-rating-label {
+    display: block;
+    font-size: 14px;
+    opacity: 0.6;
+    margin-bottom: 12px;
+}
+
+.ankieta-stars {
+    display: flex;
+    gap: 8px;
+}
+
+.ankieta-star {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.3);
+    transition: all 0.2s ease;
+}
+
+.ankieta-star:hover {
+    color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.1);
+}
+
+.ankieta-star.active {
+    color: #ffffff;
+}
+
+.ankieta-star.active svg path {
+    fill: #ffffff;
+}
+
+.ankieta-star svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Przyciski */
+.ankieta-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: auto;
+    padding-top: 30px;
+}
+
+.ankieta-btn {
+    padding: 18px 40px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ankieta-btn-primary {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+}
+
+.ankieta-btn-primary:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+}
+
+.ankieta-btn-ghost {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.ankieta-btn-ghost:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Select dla pytania zamykającego */
+.ankieta-select-wrapper {
+    margin-bottom: 30px;
+}
+
+.ankieta-select {
+    width: 100%;
+    padding: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    transition: border-color 0.3s ease;
+}
+
+.ankieta-select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.ankieta-select option {
+    background: #1a1a1a;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.ankieta-select.error {
+    border-color: #f44336;
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Thank you screen */
+.ankieta-thankyou-text {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+.ankieta-divider {
+    width: 60px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+    margin-bottom: 40px;
+}
+
+.ankieta-cta-text {
+    font-size: 16px;
+    opacity: 0.7;
+    margin-bottom: 30px;
+}
+
+.ankieta-duo-info {
+    margin-bottom: 40px;
+}
+
+.ankieta-duo-logo {
+    max-width: 120px;
+    margin-bottom: 15px;
+}
+
+.ankieta-duo-desc {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.6;
+    opacity: 0.8;
+}
+
+.ankieta-links {
+    display: flex;
+    gap: 30px;
+}
+
+.ankieta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.ankieta-link:hover {
+    opacity: 1;
+}
+
+.ankieta-link-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Logo małe (intro) */
+.ankieta-logo-small {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+}
+
+.ankieta-logo-small img {
+    max-width: 80px;
+    opacity: 0.6;
+}
+
+/* Progress bar */
+.ankieta-progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+}
+
+.ankieta-progress.visible {
+    opacity: 1;
+}
+
+.ankieta-progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.ankieta-progress-fill {
+    height: 100%;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+}
+
+.ankieta-progress-text {
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.7;
+    min-width: 40px;
+    text-align: right;
+}
+
+/* Responsywność - Ankieta */
+@media (max-width: 768px) {
+    .ankieta-container {
+        padding: 30px 20px;
+        padding-bottom: 100px;
+    }
+
+    .ankieta-title {
+        font-size: 32px;
+    }
+
+    .ankieta-subtitle {
+        font-size: 17px;
+    }
+
+    .ankieta-question-text {
+        font-size: 22px;
+    }
+
+    .ankieta-textarea {
+        font-size: 15px;
+    }
+
+    .ankieta-actions {
+        flex-direction: column;
+    }
+
+    .ankieta-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .ankieta-logo-small {
+        bottom: 100px;
+        left: 20px;
+    }
+
+    .ankieta-progress {
+        padding: 15px 20px;
+    }
+
+    .ankieta-links {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ankieta-title {
+        font-size: 28px;
+    }
+
+    .ankieta-question-text {
+        font-size: 20px;
+    }
+
+    .ankieta-star {
+        width: 28px;
+        height: 28px;
+    }
+}
