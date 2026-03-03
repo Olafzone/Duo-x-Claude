@@ -267,28 +267,26 @@ function duo_theme_setup() {
 add_action('after_setup_theme', 'duo_theme_setup');
 
 // ============================================================================
-// ANKIETA - Social Media Confessions
+// ANKIETA - Social Media Confessions (v2 - 3 etapy)
 // ============================================================================
 
 /**
- * Tworzenie tabel dla ankiety przy aktywacji motywu
+ * Tworzenie tabeli dla ankiety przy aktywacji motywu
  */
 function duo_survey_create_tables() {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
 
     $table_responses = $wpdb->prefix . 'duo_survey_responses';
-    $table_hardest = $wpdb->prefix . 'duo_survey_hardest';
 
     $sql_responses = "CREATE TABLE $table_responses (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         session_id VARCHAR(64) NOT NULL,
-        question_number TINYINT UNSIGNED NOT NULL,
-        question_text TEXT NOT NULL,
-        answer_text TEXT,
-        star_rating TINYINT UNSIGNED DEFAULT NULL,
-        skipped TINYINT(1) DEFAULT 0,
-        time_spent_ms INT UNSIGNED DEFAULT NULL,
+        stage_number TINYINT UNSIGNED NOT NULL,
+        selected_question_text TEXT NOT NULL,
+        rejected_question_1_text TEXT NOT NULL,
+        rejected_question_2_text TEXT NOT NULL,
+        answer_text TEXT NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         ip_hash VARCHAR(64) DEFAULT NULL,
         INDEX idx_session (session_id),
@@ -296,16 +294,8 @@ function duo_survey_create_tables() {
         INDEX idx_ip_hash (ip_hash)
     ) $charset_collate;";
 
-    $sql_hardest = "CREATE TABLE $table_hardest (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        session_id VARCHAR(64) NOT NULL UNIQUE,
-        hardest_question_number TINYINT UNSIGNED NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    ) $charset_collate;";
-
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql_responses);
-    dbDelta($sql_hardest);
 }
 add_action('after_switch_theme', 'duo_survey_create_tables');
 
@@ -319,17 +309,20 @@ function duo_get_ip_hash() {
 }
 
 /**
- * Sprawdzenie rate limit - max 1 ankieta na IP na godzinę
+ * Sprawdzenie rate limit - max 1 ukończona ankieta na IP na godzinę
  */
 function duo_survey_check_rate_limit($ip_hash) {
     global $wpdb;
-    $table = $wpdb->prefix . 'duo_survey_hardest';
+    $table = $wpdb->prefix . 'duo_survey_responses';
 
-    // Sprawdź czy ten IP hash ma ukończoną ankietę w ostatniej godzinie
+    // Sprawdź czy ten IP hash ma ukończoną ankietę (3 etapy) w ostatniej godzinie
     $count = $wpdb->get_var($wpdb->prepare(
-        "SELECT COUNT(DISTINCT h.session_id) FROM $table h
-         INNER JOIN {$wpdb->prefix}duo_survey_responses r ON h.session_id = r.session_id
-         WHERE r.ip_hash = %s AND h.created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)",
+        "SELECT COUNT(DISTINCT session_id) FROM $table
+         WHERE ip_hash = %s
+         AND created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)
+         GROUP BY session_id
+         HAVING COUNT(*) >= 3
+         LIMIT 1",
         $ip_hash
     ));
 
@@ -337,7 +330,7 @@ function duo_survey_check_rate_limit($ip_hash) {
 }
 
 /**
- * AJAX: Zapis pojedynczej odpowiedzi
+ * AJAX: Zapis odpowiedzi na etap
  */
 function duo_survey_save_response() {
     // Weryfikacja nonce
@@ -353,31 +346,27 @@ function duo_survey_save_response() {
 
     // Pobierz i waliduj dane
     $session_id = isset($_POST['session_id']) ? sanitize_text_field($_POST['session_id']) : '';
-    $question_number = isset($_POST['question_number']) ? intval($_POST['question_number']) : 0;
-    $question_text = isset($_POST['question_text']) ? sanitize_textarea_field($_POST['question_text']) : '';
+    $stage_number = isset($_POST['stage_number']) ? intval($_POST['stage_number']) : 0;
+    $selected_question = isset($_POST['selected_question_text']) ? sanitize_textarea_field($_POST['selected_question_text']) : '';
+    $rejected_1 = isset($_POST['rejected_question_1_text']) ? sanitize_textarea_field($_POST['rejected_question_1_text']) : '';
+    $rejected_2 = isset($_POST['rejected_question_2_text']) ? sanitize_textarea_field($_POST['rejected_question_2_text']) : '';
     $answer_text = isset($_POST['answer_text']) ? sanitize_textarea_field($_POST['answer_text']) : '';
-    $star_rating = isset($_POST['star_rating']) ? intval($_POST['star_rating']) : null;
-    $skipped = isset($_POST['skipped']) && $_POST['skipped'] === '1' ? 1 : 0;
-    $time_spent_ms = isset($_POST['time_spent_ms']) ? intval($_POST['time_spent_ms']) : 0;
 
     // Walidacja podstawowa
     if (empty($session_id) || strlen($session_id) < 16 || strlen($session_id) > 64) {
         wp_send_json_error(array('message' => 'Nieprawidłowa sesja.'));
     }
 
-    if ($question_number < 1 || $question_number > 8) {
-        wp_send_json_error(array('message' => 'Nieprawidłowe pytanie.'));
+    if ($stage_number < 1 || $stage_number > 3) {
+        wp_send_json_error(array('message' => 'Nieprawidłowy etap.'));
     }
 
-    // Minimum time check (3 sekundy, chyba że skip)
-    if (!$skipped && $time_spent_ms < 3000 && !empty($answer_text)) {
-        // Zbyt szybko - potencjalny bot, ale zapisz z flagą
-        // Możemy później filtrować te odpowiedzi
+    if (empty($selected_question)) {
+        wp_send_json_error(array('message' => 'Brak wybranego pytania.'));
     }
 
-    // Sanityzacja star_rating
-    if ($star_rating !== null && ($star_rating < 1 || $star_rating > 5)) {
-        $star_rating = null;
+    if (empty($answer_text)) {
+        wp_send_json_error(array('message' => 'Odpowiedź nie może być pusta.'));
     }
 
     // Ogranicz długość odpowiedzi
@@ -385,14 +374,19 @@ function duo_survey_save_response() {
 
     $ip_hash = duo_get_ip_hash();
 
+    // Rate limit check na ostatnim etapie
+    if ($stage_number === 3 && !duo_survey_check_rate_limit($ip_hash)) {
+        // Nie informuj użytkownika - po prostu zapisz normalnie ale możemy flagować
+    }
+
     global $wpdb;
     $table = $wpdb->prefix . 'duo_survey_responses';
 
-    // Sprawdź czy odpowiedź na to pytanie już istnieje dla tej sesji
+    // Sprawdź czy odpowiedź na ten etap już istnieje dla tej sesji
     $existing = $wpdb->get_var($wpdb->prepare(
-        "SELECT id FROM $table WHERE session_id = %s AND question_number = %d",
+        "SELECT id FROM $table WHERE session_id = %s AND stage_number = %d",
         $session_id,
-        $question_number
+        $stage_number
     ));
 
     if ($existing) {
@@ -400,13 +394,13 @@ function duo_survey_save_response() {
         $result = $wpdb->update(
             $table,
             array(
+                'selected_question_text' => $selected_question,
+                'rejected_question_1_text' => $rejected_1,
+                'rejected_question_2_text' => $rejected_2,
                 'answer_text' => $answer_text,
-                'star_rating' => $star_rating,
-                'skipped' => $skipped,
-                'time_spent_ms' => $time_spent_ms,
             ),
             array('id' => $existing),
-            array('%s', '%d', '%d', '%d'),
+            array('%s', '%s', '%s', '%s'),
             array('%d')
         );
     } else {
@@ -415,15 +409,14 @@ function duo_survey_save_response() {
             $table,
             array(
                 'session_id' => $session_id,
-                'question_number' => $question_number,
-                'question_text' => $question_text,
+                'stage_number' => $stage_number,
+                'selected_question_text' => $selected_question,
+                'rejected_question_1_text' => $rejected_1,
+                'rejected_question_2_text' => $rejected_2,
                 'answer_text' => $answer_text,
-                'star_rating' => $star_rating,
-                'skipped' => $skipped,
-                'time_spent_ms' => $time_spent_ms,
                 'ip_hash' => $ip_hash,
             ),
-            array('%s', '%d', '%s', '%s', '%d', '%d', '%d', '%s')
+            array('%s', '%d', '%s', '%s', '%s', '%s', '%s')
         );
     }
 
@@ -437,63 +430,6 @@ add_action('wp_ajax_duo_survey_save', 'duo_survey_save_response');
 add_action('wp_ajax_nopriv_duo_survey_save', 'duo_survey_save_response');
 
 /**
- * AJAX: Zapis najtrudniejszego pytania (zakończenie ankiety)
- */
-function duo_survey_complete() {
-    // Weryfikacja nonce
-    if (!isset($_POST['survey_nonce']) || !wp_verify_nonce($_POST['survey_nonce'], 'duo_survey')) {
-        wp_send_json_error(array('message' => 'Błąd bezpieczeństwa.'));
-    }
-
-    // Honeypot check
-    if (!empty($_POST['website'])) {
-        wp_send_json_success(array('message' => 'OK'));
-    }
-
-    $session_id = isset($_POST['session_id']) ? sanitize_text_field($_POST['session_id']) : '';
-    $hardest_question = isset($_POST['hardest_question']) ? intval($_POST['hardest_question']) : 0;
-
-    if (empty($session_id) || strlen($session_id) < 16) {
-        wp_send_json_error(array('message' => 'Nieprawidłowa sesja.'));
-    }
-
-    if ($hardest_question < 1 || $hardest_question > 8) {
-        wp_send_json_error(array('message' => 'Nieprawidłowy wybór.'));
-    }
-
-    // Rate limit check
-    $ip_hash = duo_get_ip_hash();
-    if (!duo_survey_check_rate_limit($ip_hash)) {
-        // Nie informuj użytkownika - po prostu nie zapisuj ponownie
-        wp_send_json_success(array('message' => 'OK'));
-    }
-
-    global $wpdb;
-    $table = $wpdb->prefix . 'duo_survey_hardest';
-
-    // Sprawdź czy ta sesja już ma wpis
-    $existing = $wpdb->get_var($wpdb->prepare(
-        "SELECT id FROM $table WHERE session_id = %s",
-        $session_id
-    ));
-
-    if (!$existing) {
-        $wpdb->insert(
-            $table,
-            array(
-                'session_id' => $session_id,
-                'hardest_question_number' => $hardest_question,
-            ),
-            array('%s', '%d')
-        );
-    }
-
-    wp_send_json_success(array('message' => 'OK'));
-}
-add_action('wp_ajax_duo_survey_complete', 'duo_survey_complete');
-add_action('wp_ajax_nopriv_duo_survey_complete', 'duo_survey_complete');
-
-/**
  * Ładowanie skryptów dla strony ankiety
  */
 function duo_survey_enqueue_scripts() {
@@ -502,7 +438,7 @@ function duo_survey_enqueue_scripts() {
             'duo-ankieta',
             get_template_directory_uri() . '/assets/js/ankieta.js',
             array(),
-            '1.0.0',
+            '2.0.0',
             true
         );
 
