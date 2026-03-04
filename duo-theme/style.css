@@ -418,19 +418,27 @@ body {
 }
 
 .ankieta-question-box {
+    /* Reset button defaults */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    /* Custom styles */
     width: 100%;
     padding: 18px 24px;
-    background: transparent;
+    background: transparent !important;
+    background-color: transparent !important;
     border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: left;
+    display: block;
 }
 
 .ankieta-question-box:hover {
     border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05) !important;
 }
 
 .ankieta-box-text {
@@ -444,7 +452,7 @@ body {
 
 .ankieta-question-box.selected {
     border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1) !important;
 }
 
 .ankieta-question-box.rejected {
