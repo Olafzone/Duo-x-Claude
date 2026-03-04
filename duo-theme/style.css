@@ -411,43 +411,40 @@ body {
 /* Boxy z pytaniami */
 .ankieta-boxes {
     display: flex;
-    flex-direction: row;
-    gap: 20px;
+    flex-direction: column;
+    gap: 16px;
     width: 100%;
+    max-width: 600px;
 }
 
 .ankieta-question-box {
-    flex: 1;
-    padding: 30px 25px;
+    width: 100%;
+    padding: 18px 24px;
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: left;
-    min-height: 140px;
-    display: flex;
-    align-items: center;
 }
 
 .ankieta-question-box:hover {
     border-color: #ffffff;
-    transform: scale(1.02);
     background: rgba(255, 255, 255, 0.05);
 }
 
 .ankieta-box-text {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
     color: #ffffff;
 }
 
 .ankieta-question-box.selected {
     border-color: #ffffff;
     background: rgba(255, 255, 255, 0.1);
-    transform: scale(1.02);
 }
 
 .ankieta-question-box.rejected {
@@ -664,13 +661,8 @@ body {
         font-size: 15px;
     }
 
-    .ankieta-boxes {
-        flex-direction: column;
-    }
-
     .ankieta-question-box {
-        min-height: auto;
-        padding: 25px 20px;
+        padding: 16px 20px;
     }
 
     .ankieta-actions {
