@@ -236,14 +236,26 @@ body {
 }
 
 /* ============================================================================
-   ANKIETA - Social Media Confessions
+   ANKIETA - Social Media Confessions (clean version)
    ============================================================================ */
+
+/* Reset dla buttonów w ankiecie */
+.ankieta-page button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
 
 .ankieta-page {
     background: #0a0a0a;
 }
 
-/* Tło ze zdjęciem */
+/* Tło */
 .ankieta-background {
     position: fixed;
     top: 0;
@@ -254,7 +266,6 @@ body {
     background-image: url('assets/images/ankieta-bg.jpg');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
 }
 
 .ankieta-overlay {
@@ -266,7 +277,7 @@ body {
     background: rgba(0, 0, 0, 0.6);
 }
 
-/* Główny kontener */
+/* Kontener */
 .ankieta-container {
     position: relative;
     z-index: 1;
@@ -277,12 +288,10 @@ body {
     padding-bottom: 80px;
 }
 
-/* Honeypot - ukryty */
+/* Honeypot */
 .ankieta-honeypot {
     position: absolute;
     left: -9999px;
-    width: 1px;
-    height: 1px;
     opacity: 0;
     pointer-events: none;
 }
@@ -292,91 +301,130 @@ body {
     display: none;
     flex-direction: column;
     flex: 1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
 }
 
 .ankieta-screen.active {
     display: flex;
-    opacity: 1;
 }
 
-/* Zawartość ekranu */
+/* Zawartość */
 .ankieta-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 700px;
+    max-width: 600px;
 }
 
 /* Tytuły */
 .ankieta-title {
-    font-size: 48px;
+    font-size: 42px;
     font-weight: 700;
-    letter-spacing: -1px;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
     line-height: 1.1;
 }
 
 .ankieta-subtitle {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 300;
     line-height: 1.6;
     opacity: 0.9;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
 }
 
-/* Pytanie */
-.ankieta-question-header {
-    margin-bottom: 20px;
+/* Nagłówek etapu */
+.ankieta-stage-header {
+    margin-bottom: 24px;
 }
 
-.ankieta-question-number {
+.ankieta-stage-number {
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 2px;
-    opacity: 0.6;
+    opacity: 0.5;
     text-transform: uppercase;
 }
 
-.ankieta-question-text {
-    font-size: 28px;
+/* Instrukcja */
+.ankieta-stage-instruction {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 24px;
+}
+
+/* === BOXY PYTAŃ === */
+.ankieta-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ankieta-question-box {
+    padding: 18px 24px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+
+.ankieta-question-box:hover {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ankieta-question-box.selected {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ankieta-question-box.rejected {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.ankieta-box-text {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff;
+}
+
+/* Wybrane pytanie (po kliknięciu) */
+.ankieta-selected-question {
+    font-size: 24px;
     font-weight: 500;
     line-height: 1.3;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
 }
 
 /* Textarea */
 .ankieta-textarea-wrapper {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .ankieta-textarea {
     width: 100%;
-    min-height: 100px;
-    max-height: 200px;
-    padding: 20px;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
+    min-height: 120px;
+    padding: 18px 24px;
+    font-family: inherit;
+    font-size: 15px;
     line-height: 1.5;
     color: #ffffff;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
     resize: none;
-    transition: border-color 0.3s ease;
-}
-
-.ankieta-textarea::placeholder {
-    color: rgba(255, 255, 255, 0.4);
 }
 
 .ankieta-textarea:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.8);
+    border-color: #ffffff;
+}
+
+.ankieta-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .ankieta-char-count {
@@ -387,149 +435,38 @@ body {
     opacity: 0.4;
 }
 
-/* Etap - nagłówek */
-.ankieta-stage-header {
-    margin-bottom: 30px;
-}
-
-.ankieta-stage-number {
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    opacity: 0.6;
-    text-transform: uppercase;
-}
-
-/* Etap - instrukcja */
-.ankieta-stage-instruction {
-    font-size: 18px;
-    font-weight: 300;
-    opacity: 0.8;
-    margin-bottom: 30px;
-}
-
-/* Boxy z pytaniami */
-.ankieta-boxes {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    max-width: 600px;
-}
-
-.ankieta-question-box {
-    /* Reset button defaults */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    outline: none;
-    /* Custom styles */
-    width: 100%;
-    padding: 18px 24px;
-    background: transparent !important;
-    background-color: transparent !important;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: left;
-    display: block;
-}
-
-.ankieta-question-box:hover {
-    border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.05) !important;
-}
-
-.ankieta-box-text {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.4;
-    letter-spacing: 0.5px;
-    color: #ffffff;
-}
-
-.ankieta-question-box.selected {
-    border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.1) !important;
-}
-
-.ankieta-question-box.rejected {
-    opacity: 0.3;
-    pointer-events: none;
-}
-
-/* Etap - stan odpowiedzi */
-.ankieta-stage-answer {
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.ankieta-selected-question {
-    font-size: 26px;
-    font-weight: 500;
-    line-height: 1.3;
-    margin-bottom: 30px;
-}
-
 /* Przyciski */
 .ankieta-actions {
-    display: flex;
-    gap: 16px;
     margin-top: auto;
     padding-top: 30px;
 }
 
 .ankieta-btn {
     padding: 18px 40px;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: 1px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    border-radius: 6px;
+    transition: all 0.2s ease;
 }
 
 .ankieta-btn-primary {
     background: #ffffff;
     color: #000000;
-    border: none;
 }
 
 .ankieta-btn-primary:hover {
-    background: rgba(255, 255, 255, 0.9);
-    transform: translateY(-2px);
-}
-
-.ankieta-btn-ghost {
-    background: transparent;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.ankieta-btn-ghost:hover {
-    border-color: rgba(255, 255, 255, 0.8);
+    opacity: 0.9;
 }
 
 .ankieta-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
-    transform: none;
 }
 
-.ankieta-btn:disabled:hover {
-    transform: none;
-}
-
-/* Thank you screen */
+/* Thank you */
 .ankieta-thankyou-text {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 300;
     line-height: 1.7;
     opacity: 0.9;
@@ -544,9 +481,9 @@ body {
 }
 
 .ankieta-cta-text {
-    font-size: 16px;
+    font-size: 15px;
     opacity: 0.7;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .ankieta-duo-info {
@@ -554,12 +491,12 @@ body {
 }
 
 .ankieta-duo-logo {
-    max-width: 120px;
-    margin-bottom: 15px;
+    max-width: 100px;
+    margin-bottom: 12px;
 }
 
 .ankieta-duo-desc {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 300;
     line-height: 1.6;
     opacity: 0.8;
@@ -567,7 +504,7 @@ body {
 
 .ankieta-links {
     display: flex;
-    gap: 30px;
+    gap: 24px;
 }
 
 .ankieta-link {
@@ -576,10 +513,9 @@ body {
     gap: 8px;
     color: #ffffff;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     opacity: 0.8;
-    transition: opacity 0.3s ease;
 }
 
 .ankieta-link:hover {
@@ -587,11 +523,11 @@ body {
 }
 
 .ankieta-link-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
 }
 
-/* Logo małe (intro) */
+/* Logo małe */
 .ankieta-logo-small {
     position: absolute;
     bottom: 40px;
@@ -599,11 +535,11 @@ body {
 }
 
 .ankieta-logo-small img {
-    max-width: 80px;
-    opacity: 0.6;
+    max-width: 70px;
+    opacity: 0.5;
 }
 
-/* Progress bar */
+/* Progress */
 .ankieta-progress {
     position: fixed;
     bottom: 0;
@@ -612,10 +548,10 @@ body {
     padding: 20px 40px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s;
     z-index: 100;
 }
 
@@ -628,53 +564,42 @@ body {
     height: 3px;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
-    overflow: hidden;
 }
 
 .ankieta-progress-fill {
     height: 100%;
     background: #ffffff;
-    border-radius: 2px;
-    transition: width 0.4s ease;
+    transition: width 0.3s;
 }
 
 .ankieta-progress-text {
-    font-size: 13px;
-    font-weight: 500;
-    opacity: 0.7;
-    min-width: 40px;
+    font-size: 12px;
+    opacity: 0.6;
+    min-width: 35px;
     text-align: right;
 }
 
-/* Responsywność - Ankieta */
+/* Mobile */
 @media (max-width: 768px) {
     .ankieta-container {
-        padding: 30px 20px;
+        padding: 24px 20px;
         padding-bottom: 100px;
     }
 
     .ankieta-title {
-        font-size: 32px;
+        font-size: 28px;
     }
 
     .ankieta-subtitle {
-        font-size: 17px;
+        font-size: 16px;
     }
 
     .ankieta-selected-question {
-        font-size: 22px;
-    }
-
-    .ankieta-textarea {
-        font-size: 15px;
+        font-size: 20px;
     }
 
     .ankieta-question-box {
         padding: 16px 20px;
-    }
-
-    .ankieta-actions {
-        flex-direction: column;
     }
 
     .ankieta-btn {
@@ -693,20 +618,7 @@ body {
 
     .ankieta-links {
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
     }
 }
 
-@media (max-width: 480px) {
-    .ankieta-title {
-        font-size: 28px;
-    }
-
-    .ankieta-selected-question {
-        font-size: 20px;
-    }
-
-    .ankieta-box-text {
-        font-size: 15px;
-    }
-}
