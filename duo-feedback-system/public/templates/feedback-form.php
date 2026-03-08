@@ -31,8 +31,8 @@ $questions = array(
     array(
         'id' => 'q3_transformation',
         'type' => 'textarea',
-        'question' => 'Jak zmienilo sie Twoje podejscie do komunikacji/marki po projekcie?',
-        'placeholder' => 'Np. Teraz mam kompas - wiem co pasuje a co nie...',
+        'question' => 'Co zmienilo sie w Twoim podejsciu po zakonczeniu projektu?',
+        'placeholder' => '',
         'required' => true,
     ),
     array(
