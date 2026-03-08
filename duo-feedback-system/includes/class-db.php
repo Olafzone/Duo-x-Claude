@@ -153,20 +153,24 @@ class Duo_Feedback_DB {
     public function save_feedback($data) {
         global $wpdb;
 
-        $result = $wpdb->insert(
-            $this->table_feedback,
-            array(
-                'project_id' => intval($data['project_id']),
-                'session_id' => sanitize_text_field($data['session_id']),
-                'form_data' => wp_json_encode($data['form_data']),
-                'overall_rating' => isset($data['form_data']['q6_rating']) ? intval($data['form_data']['q6_rating']) : null,
-                'testimonial_permission' => isset($data['form_data']['q7_testimonial_permission']) ? sanitize_text_field($data['form_data']['q7_testimonial_permission']) : 'internal',
-                'ip_hash' => $data['ip_hash'],
-                'user_agent' => isset($data['user_agent']) ? substr(sanitize_text_field($data['user_agent']), 0, 500) : null,
-                'status' => 'new',
-            ),
-            array('%d', '%s', '%s', '%d', '%s', '%s', '%s', '%s')
+        $insert_data = array(
+            'session_id' => sanitize_text_field($data['session_id']),
+            'form_data' => wp_json_encode($data['form_data']),
+            'overall_rating' => isset($data['form_data']['q6_rating']) ? intval($data['form_data']['q6_rating']) : null,
+            'testimonial_permission' => isset($data['form_data']['q7_testimonial_permission']) ? sanitize_text_field($data['form_data']['q7_testimonial_permission']) : 'internal',
+            'ip_hash' => $data['ip_hash'],
+            'user_agent' => isset($data['user_agent']) ? substr(sanitize_text_field($data['user_agent']), 0, 500) : null,
+            'status' => 'new',
         );
+        $format = array('%s', '%s', '%d', '%s', '%s', '%s', '%s');
+
+        // Add project_id if provided (NULL for universal survey)
+        if (!empty($data['project_id'])) {
+            $insert_data['project_id'] = intval($data['project_id']);
+            $format[] = '%d';
+        }
+
+        $result = $wpdb->insert($this->table_feedback, $insert_data, $format);
 
         return $result ? $wpdb->insert_id : false;
     }
@@ -294,6 +298,41 @@ class Duo_Feedback_DB {
                  WHERE session_id = %s AND project_id = %d",
                 $session_id,
                 $project_id
+            )
+        );
+
+        return intval($count) > 0;
+    }
+
+    /**
+     * Check rate limit for universal survey (no project)
+     */
+    public function check_rate_limit_universal($ip_hash) {
+        global $wpdb;
+
+        $count = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM {$this->table_feedback}
+                 WHERE project_id IS NULL AND ip_hash = %s
+                 AND created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)",
+                $ip_hash
+            )
+        );
+
+        return intval($count) === 0;
+    }
+
+    /**
+     * Check if session exists for universal survey
+     */
+    public function session_exists_universal($session_id) {
+        global $wpdb;
+
+        $count = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM {$this->table_feedback}
+                 WHERE session_id = %s AND project_id IS NULL",
+                $session_id
             )
         );
 

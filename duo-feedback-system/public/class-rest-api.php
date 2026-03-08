@@ -34,7 +34,7 @@ class Duo_Feedback_REST_API {
             'permission_callback' => '__return_true',
             'args' => array(
                 'project_slug' => array(
-                    'required' => true,
+                    'required' => false,
                     'type' => 'string',
                     'sanitize_callback' => 'sanitize_text_field',
                 ),
@@ -73,43 +73,68 @@ class Duo_Feedback_REST_API {
             ), 200);
         }
 
-        // Validate project
-        $project = $this->db->get_project_by_slug($project_slug);
-        if (!$project) {
-            return new WP_Error(
-                'invalid_project',
-                'Projekt nie istnieje.',
-                array('status' => 404)
-            );
-        }
-
-        if ($project->status !== 'active') {
-            return new WP_Error(
-                'project_inactive',
-                'Formularz dla tego projektu jest nieaktywny.',
-                array('status' => 400)
-            );
-        }
-
         // Get IP hash
         $ip_hash = Duo_Feedback_Public::get_ip_hash();
 
-        // Rate limiting
-        if (!$this->db->check_rate_limit($project->id, $ip_hash)) {
-            return new WP_Error(
-                'rate_limited',
-                'Prosimy poczekac przed kolejna proba.',
-                array('status' => 429)
-            );
-        }
+        // Handle project-specific or universal survey
+        $project = null;
+        $project_id = null;
 
-        // Check duplicate session
-        if ($this->db->session_exists($session_id, $project->id)) {
-            return new WP_Error(
-                'duplicate_submission',
-                'Ta sesja juz zostala wyslana.',
-                array('status' => 400)
-            );
+        if (!empty($project_slug)) {
+            $project = $this->db->get_project_by_slug($project_slug);
+            if (!$project) {
+                return new WP_Error(
+                    'invalid_project',
+                    'Projekt nie istnieje.',
+                    array('status' => 404)
+                );
+            }
+
+            if ($project->status !== 'active') {
+                return new WP_Error(
+                    'project_inactive',
+                    'Formularz dla tego projektu jest nieaktywny.',
+                    array('status' => 400)
+                );
+            }
+
+            $project_id = $project->id;
+
+            // Rate limiting (per project)
+            if (!$this->db->check_rate_limit($project_id, $ip_hash)) {
+                return new WP_Error(
+                    'rate_limited',
+                    'Prosimy poczekac przed kolejna proba.',
+                    array('status' => 429)
+                );
+            }
+
+            // Check duplicate session
+            if ($this->db->session_exists($session_id, $project_id)) {
+                return new WP_Error(
+                    'duplicate_submission',
+                    'Ta sesja juz zostala wyslana.',
+                    array('status' => 400)
+                );
+            }
+        } else {
+            // Universal survey - rate limit by IP only
+            if (!$this->db->check_rate_limit_universal($ip_hash)) {
+                return new WP_Error(
+                    'rate_limited',
+                    'Prosimy poczekac przed kolejna proba.',
+                    array('status' => 429)
+                );
+            }
+
+            // Check duplicate session (universal)
+            if ($this->db->session_exists_universal($session_id)) {
+                return new WP_Error(
+                    'duplicate_submission',
+                    'Ta sesja juz zostala wyslana.',
+                    array('status' => 400)
+                );
+            }
         }
 
         // Validate session ID format
@@ -126,7 +151,7 @@ class Duo_Feedback_REST_API {
 
         // Save to database
         $submission_id = $this->db->save_feedback(array(
-            'project_id' => $project->id,
+            'project_id' => $project_id,
             'session_id' => $session_id,
             'form_data' => $sanitized_data,
             'ip_hash' => $ip_hash,
@@ -142,18 +167,28 @@ class Duo_Feedback_REST_API {
         }
 
         // Send emails
-        $this->email->send_client_thankyou(
-            $project->client_email,
-            $project->client_name,
-            $project->project_name
-        );
+        if ($project) {
+            // Project-specific: send to client and admin
+            $this->email->send_client_thankyou(
+                $project->client_email,
+                $project->client_name,
+                $project->project_name
+            );
 
-        $admin_email = $project->admin_email ?: get_option('admin_email');
-        $this->email->send_admin_notification(
-            $admin_email,
-            $sanitized_data,
-            $project
-        );
+            $admin_email = $project->admin_email ?: get_option('admin_email');
+            $this->email->send_admin_notification(
+                $admin_email,
+                $sanitized_data,
+                $project
+            );
+        } else {
+            // Universal: send only to admin
+            $this->email->send_admin_notification(
+                get_option('admin_email'),
+                $sanitized_data,
+                null
+            );
+        }
 
         return new WP_REST_Response(array(
             'success' => true,

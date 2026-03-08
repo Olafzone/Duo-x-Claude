@@ -142,10 +142,16 @@ $questions = array(
                         Czesc!
                     <?php endif; ?>
                 </h1>
+                <?php if ($project): ?>
                 <p class="duo-feedback-subtitle">
-                    Projekt <strong><?php echo esc_html($project_name ?: 'Twoj projekt'); ?></strong> wlasnie wyladowal w swiecie.
+                    Projekt <?php echo esc_html($project_name); ?> wlasnie wyladowal w swiecie.
                     Mamy nadzieje, ze daje Ci kompas do dalszych decyzji wizualnych.
                 </p>
+                <?php else: ?>
+                <p class="duo-feedback-subtitle">
+                    Dziekujemy za wspolprace. Mamy nadzieje, ze projekt daje Ci kompas do dalszych decyzji wizualnych.
+                </p>
+                <?php endif; ?>
                 <p class="duo-feedback-subtitle">
                     Mamy dla Ciebie krotki formularz z pytaniami o wspolprace.<br>
                     Zajmie ~5 minut. Twoje odpowiedzi pomagaja nam rosnac.

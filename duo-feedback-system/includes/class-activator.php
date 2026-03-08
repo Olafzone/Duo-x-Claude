@@ -44,11 +44,11 @@ class Duo_Feedback_Activator {
             KEY idx_created (created_at)
         ) $charset_collate;";
 
-        // Table: Feedback responses
+        // Table: Feedback responses (project_id NULL = universal survey)
         $table_feedback = $wpdb->prefix . 'duo_feedback';
         $sql_feedback = "CREATE TABLE $table_feedback (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            project_id BIGINT UNSIGNED NOT NULL,
+            project_id BIGINT UNSIGNED DEFAULT NULL,
             session_id VARCHAR(64) NOT NULL,
             form_data LONGTEXT NOT NULL,
             overall_rating TINYINT UNSIGNED DEFAULT NULL,

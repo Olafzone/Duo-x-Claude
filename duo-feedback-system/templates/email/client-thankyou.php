@@ -12,14 +12,14 @@
                     <!-- Header -->
                     <tr>
                         <td style="background-color: #000000; padding: 30px 40px;">
-                            <span style="color: #ffffff; font-size: 24px; font-weight: 700;">Duo.</span>
+                            <span style="color: #ffffff; font-size: 24px;">Duo.</span>
                         </td>
                     </tr>
 
                     <!-- Content -->
                     <tr>
                         <td style="padding: 40px;">
-                            <h1 style="margin: 0 0 20px 0; font-size: 28px; font-weight: 600; color: #000000;">
+                            <h1 style="margin: 0 0 20px 0; font-size: 28px; color: #000000;">
                                 Dziekujemy za feedback, <?php echo esc_html($client_name); ?>!
                             </h1>
 
@@ -32,14 +32,14 @@
                             </p>
 
                             <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #333333;">
-                                Za 2-3 tygodnie ping'niemy jeszcze raz - bedzie ciekawie jak projekt <strong><?php echo esc_html($project_name); ?></strong> dziala w praktyce, gdy juz go uzywasz na co dzien.
+                                Za 2-3 tygodnie ping'niemy jeszcze raz - bedzie ciekawie jak projekt <?php echo esc_html($project_name); ?> dziala w praktyce, gdy juz go uzywasz na co dzien.
                             </p>
 
                             <hr style="border: none; border-top: 1px solid #eeeeee; margin: 30px 0;">
 
                             <p style="margin: 0; font-size: 14px; color: #666666;">
                                 Stay in touch,<br>
-                                <strong>Olaf, Dominika, Marta</strong><br>
+                                Olaf, Dominika, Marta<br>
                                 Duo.
                             </p>
                         </td>
