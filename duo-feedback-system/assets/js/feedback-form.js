@@ -8,7 +8,7 @@
     // Configuration
     const CONFIG = {
         STORAGE_KEY: 'duo_feedback_progress',
-        TOTAL_QUESTIONS: 9,
+        TOTAL_QUESTIONS: 8,
     };
 
     // State
@@ -242,6 +242,14 @@
         const radio = screen.querySelector('input[type="radio"]:checked');
         if (radio) {
             state.formData[radio.name] = radio.value;
+
+            // Save testimonial name if public option selected
+            if (radio.name === 'q7_testimonial_permission' && radio.value === 'public') {
+                const nameInput = screen.querySelector('.duo-feedback-name-input');
+                if (nameInput) {
+                    state.formData['testimonial_name'] = nameInput.value.trim();
+                }
+            }
         }
 
         // Scale
@@ -250,13 +258,6 @@
             state.formData[questionId] = parseInt(scaleBtn.dataset.value);
         }
 
-        // Combined fields (q8_q9)
-        if (questionId === 'q8_q9_combined') {
-            const textareas = screen.querySelectorAll('.duo-feedback-textarea[data-field]');
-            textareas.forEach(ta => {
-                state.formData[ta.dataset.field] = ta.value.trim();
-            });
-        }
     }
 
     /**
@@ -315,6 +316,14 @@
      */
     function handleOptionChange(input) {
         updateNextButtonState();
+
+        // Toggle testimonial name field
+        if (input.name === 'q7_testimonial_permission') {
+            const nameField = container.querySelector('.duo-feedback-testimonial-name');
+            if (nameField) {
+                nameField.style.display = input.value === 'public' ? 'block' : 'none';
+            }
+        }
     }
 
     /**

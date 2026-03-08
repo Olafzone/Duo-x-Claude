@@ -188,13 +188,9 @@
             height: 20px;
             flex-shrink: 0;
             border: 2px solid rgba(255, 255, 255, 0.8);
-            border-radius: 4px;
+            border-radius: 50%;
             position: relative;
             margin-top: 2px;
-        }
-
-        .option input[type="radio"] + .option-box {
-            border-radius: 50%;
         }
 
         .option input:checked + .option-box {
@@ -211,10 +207,6 @@
             width: 8px;
             height: 8px;
             background: #000000;
-            border-radius: 2px;
-        }
-
-        .option input[type="radio"]:checked + .option-box::after {
             border-radius: 50%;
         }
 
@@ -487,7 +479,7 @@
     <div class="preview-controls">
         <button class="preview-btn" onclick="prevScreen()">Prev</button>
         <button class="preview-btn" onclick="nextScreen()">Next</button>
-        <span style="color: #fff; font-size: 12px; padding: 8px;" id="screen-indicator">1/11</span>
+        <span style="color: #fff; font-size: 12px; padding: 8px;" id="screen-indicator">1/10</span>
     </div>
 
     <!-- Main container -->
@@ -496,10 +488,9 @@
         <!-- SCREEN 1: Intro -->
         <section class="screen active" data-index="0">
             <div class="content">
-                <h1 class="title">Czesc, Kamil!</h1>
+                <h1 class="title">Czesc!</h1>
                 <p class="subtitle">
-                    Projekt Visual Identity wlasnie wyladowal w swiecie.
-                    Mamy nadzieje, ze daje Ci kompas do dalszych decyzji wizualnych.
+                    Dziekujemy za wspolprace. Mamy nadzieje, ze projekt daje Ci kompas do dalszych decyzji wizualnych.
                 </p>
                 <p class="subtitle">
                     Mamy dla Ciebie krotki formularz z pytaniami o wspolprace.<br>
@@ -517,7 +508,7 @@
         <!-- SCREEN 2: Q1 -->
         <section class="screen" data-index="1">
             <div class="question-header">
-                <span class="question-number">1 / 9</span>
+                <span class="question-number">1 / 8</span>
             </div>
             <div class="content">
                 <h2 class="question-text">Co bylo glownym wyzwaniem przed startem wspolpracy?</h2>
@@ -534,7 +525,7 @@
         <!-- SCREEN 3: Q2 -->
         <section class="screen" data-index="2">
             <div class="question-header">
-                <span class="question-number">2 / 9</span>
+                <span class="question-number">2 / 8</span>
             </div>
             <div class="content">
                 <h2 class="question-text">Co najbardziej Cie zaskoczylo w procesie?</h2>
@@ -552,7 +543,7 @@
         <!-- SCREEN 4: Q3 -->
         <section class="screen" data-index="3">
             <div class="question-header">
-                <span class="question-number">3 / 9</span>
+                <span class="question-number">3 / 8</span>
             </div>
             <div class="content">
                 <h2 class="question-text">Jak zmienilo sie Twoje podejscie do komunikacji/marki po projekcie?</h2>
@@ -570,7 +561,7 @@
         <!-- SCREEN 5: Q4 -->
         <section class="screen" data-index="4">
             <div class="question-header">
-                <span class="question-number">4 / 9</span>
+                <span class="question-number">4 / 8</span>
             </div>
             <div class="content">
                 <h2 class="question-text">Co dzialalo mega dobrze?</h2>
@@ -611,7 +602,7 @@
         <!-- SCREEN 6: Q5 -->
         <section class="screen" data-index="5">
             <div class="question-header">
-                <span class="question-number">5 / 9</span>
+                <span class="question-number">5 / 8</span>
             </div>
             <div class="content">
                 <h2 class="question-text">Co moglismy zrobic lepiej?</h2>
@@ -630,7 +621,7 @@
         <!-- SCREEN 7: Q6 Rating -->
         <section class="screen" data-index="6">
             <div class="question-header">
-                <span class="question-number">6 / 9</span>
+                <span class="question-number">6 / 8</span>
             </div>
             <div class="content">
                 <h2 class="question-text">Jak ocenilbys wspolprace ogolnie?</h2>
@@ -660,7 +651,7 @@
         <!-- SCREEN 8: Q6 Reason -->
         <section class="screen" data-index="7">
             <div class="question-header">
-                <span class="question-number">7 / 9</span>
+                <span class="question-number">7 / 8</span>
             </div>
             <div class="content">
                 <h2 class="question-text">Dlaczego ta ocena?</h2>
@@ -678,73 +669,29 @@
         <!-- SCREEN 9: Q7 Testimonial -->
         <section class="screen" data-index="8">
             <div class="question-header">
-                <span class="question-number">8 / 9</span>
+                <span class="question-number">8 / 8</span>
             </div>
             <div class="content">
                 <h2 class="question-text">Czy mozemy uzyc Twoich odpowiedzi jako referencje?</h2>
                 <div class="options">
                     <label class="option">
-                        <input type="radio" name="testimonial">
+                        <input type="radio" name="testimonial" value="public" onchange="toggleNameField(this)">
                         <span class="option-box"></span>
                         <span class="option-label">Tak, mozecie uzyc moich odpowiedzi publicznie (imie + projekt)</span>
                     </label>
                     <label class="option">
-                        <input type="radio" name="testimonial">
+                        <input type="radio" name="testimonial" value="anonymous" onchange="toggleNameField(this)">
                         <span class="option-box"></span>
                         <span class="option-label">Tak, ale anonimowo (bez imienia)</span>
                     </label>
                     <label class="option">
-                        <input type="radio" name="testimonial" checked>
+                        <input type="radio" name="testimonial" value="internal" checked onchange="toggleNameField(this)">
                         <span class="option-box"></span>
                         <span class="option-label">Tylko wewnetrznie (feedback dla was, nie do publicznego uzycia)</span>
                     </label>
                 </div>
-            </div>
-            <div class="actions">
-                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
-                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
-            </div>
-        </section>
-
-        <!-- SCREEN 10: Q8+Q9 -->
-        <section class="screen" data-index="9">
-            <div class="question-header">
-                <span class="question-number">9 / 9</span>
-            </div>
-            <div class="content">
-                <h2 class="question-text">Na koniec...</h2>
-
-                <div style="margin-bottom: 30px;">
-                    <label style="display: block; font-size: 18px; font-weight: 500; margin-bottom: 8px;">
-                        Czy znasz kogos kto moglby potrzebowac podobnego wsparcia?
-                    </label>
-                    <p class="helper">Jesli znasz muzyka/artyste/organizacje ktorzy walcza z visual identity - chetnie ich poznamy.</p>
-                    <div class="textarea-wrapper">
-                        <textarea rows="2"></textarea>
-                    </div>
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 18px; font-weight: 500; margin-bottom: 12px;">
-                        Czy chcialbys zostac w kontakcie?
-                    </label>
-                    <div class="options">
-                        <label class="option">
-                            <input type="checkbox">
-                            <span class="option-box"></span>
-                            <span class="option-label">Newsletter (insights o brandingu dla tworcow)</span>
-                        </label>
-                        <label class="option">
-                            <input type="checkbox">
-                            <span class="option-box"></span>
-                            <span class="option-label">Exclusive updates (nasze nowe projekty, behind the scenes)</span>
-                        </label>
-                        <label class="option">
-                            <input type="checkbox">
-                            <span class="option-box"></span>
-                            <span class="option-label">Invite do Meet Me dinners</span>
-                        </label>
-                    </div>
+                <div class="testimonial-name-field" id="testimonialNameField" style="display: none; margin-top: 20px;">
+                    <input type="text" class="name-input" placeholder="Twoje imie i nazwisko" style="width: 100%; padding: 16px 20px; font-size: 15px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 6px; color: #fff;">
                 </div>
             </div>
             <div class="actions">
@@ -753,8 +700,8 @@
             </div>
         </section>
 
-        <!-- SCREEN 11: Thank You -->
-        <section class="screen" data-index="10">
+        <!-- SCREEN 10: Thank You -->
+        <section class="screen" data-index="9">
             <div class="content">
                 <h1 class="title">Dzieki za szczerosc.</h1>
                 <p class="thankyou-text">
@@ -794,8 +741,17 @@
 
     <script>
         let currentIndex = 0;
-        const totalScreens = 11;
-        const totalQuestions = 9;
+        const totalScreens = 10;
+        const totalQuestions = 8;
+
+        function toggleNameField(radio) {
+            const nameField = document.getElementById('testimonialNameField');
+            if (radio.value === 'public') {
+                nameField.style.display = 'block';
+            } else {
+                nameField.style.display = 'none';
+            }
+        }
 
         function showScreen(index) {
             const screens = document.querySelectorAll('.screen');

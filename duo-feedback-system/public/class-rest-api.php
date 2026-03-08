@@ -233,13 +233,14 @@ class Duo_Feedback_REST_API {
                 : 'internal';
         }
 
+        // Testimonial name (when public selected)
+        if (isset($data['testimonial_name'])) {
+            $sanitized['testimonial_name'] = sanitize_text_field(substr($data['testimonial_name'], 0, 200));
+        }
+
         // Checkbox arrays
         if (isset($data['q4_what_worked']) && is_array($data['q4_what_worked'])) {
             $sanitized['q4_what_worked'] = array_map('sanitize_text_field', $data['q4_what_worked']);
-        }
-
-        if (isset($data['q9_stay_in_touch']) && is_array($data['q9_stay_in_touch'])) {
-            $sanitized['q9_stay_in_touch'] = array_map('sanitize_text_field', $data['q9_stay_in_touch']);
         }
 
         return $sanitized;

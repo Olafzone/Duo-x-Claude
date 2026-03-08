@@ -81,32 +81,15 @@ $questions = array(
             'internal' => 'Tylko wewnetrznie (feedback dla was, nie do publicznego uzycia)',
         ),
         'required' => true,
+        'show_name_field' => true,
     ),
     array(
-        'id' => 'q8_q9_combined',
-        'type' => 'combined',
-        'question' => 'Na koniec...',
-        'fields' => array(
-            array(
-                'id' => 'q8_referral',
-                'type' => 'textarea',
-                'label' => 'Czy znasz kogos kto moglby potrzebowac podobnego wsparcia?',
-                'helper' => 'Jesli znasz muzyka/artyste/organizacje ktorzy walcza z visual identity - chetnie ich poznamy. Zadnej presji :)',
-                'required' => false,
-            ),
-            array(
-                'id' => 'q9_stay_in_touch',
-                'type' => 'checkbox',
-                'label' => 'Czy chcialbys zostac w kontakcie?',
-                'options' => array(
-                    'newsletter' => 'Newsletter (insights o brandingu dla tworcow, raz na miesiac max)',
-                    'updates' => 'Exclusive updates (nasze nowe projekty, behind the scenes)',
-                    'dinners' => 'Invite do Meet Me dinners (jak startuja)',
-                    'none' => 'Nah, dzieki za projekt, lets leave it at that',
-                ),
-                'required' => false,
-            ),
-        ),
+        'id' => 'q8_referral',
+        'type' => 'textarea',
+        'question' => 'Czy znasz kogos kto moglby potrzebowac podobnego wsparcia?',
+        'helper' => 'Jesli znasz muzyka/artyste/organizacje ktorzy walcza z visual identity - chetnie ich poznamy. Zadnej presji :)',
+        'placeholder' => '',
+        'required' => false,
     ),
 );
 ?>
@@ -216,6 +199,11 @@ $questions = array(
                         </label>
                         <?php endforeach; ?>
                     </div>
+                    <?php if (!empty($q['show_name_field'])): ?>
+                    <div class="duo-feedback-testimonial-name" style="display: none; margin-top: 20px;">
+                        <input type="text" class="duo-feedback-name-input" placeholder="Twoje imie i nazwisko" data-field="testimonial_name">
+                    </div>
+                    <?php endif; ?>
 
                 <?php elseif ($q['type'] === 'scale'): ?>
                     <h2 class="duo-feedback-question-text"><?php echo esc_html($q['question']); ?></h2>
