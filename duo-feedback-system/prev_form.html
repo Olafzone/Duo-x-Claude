@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duo Feedback Form - Preview</title>
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            line-height: 1.6;
+            background: #0a0a0a;
+        }
+
+        button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: none;
+            border: none;
+            font: inherit;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        /* Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            padding-bottom: 80px;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 600px;
+        }
+
+        /* Typography */
+        .title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .subtitle strong {
+            font-weight: 600;
+        }
+
+        .question-header {
+            margin-bottom: 24px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 26px;
+            font-weight: 500;
+            line-height: 1.3;
+            margin-bottom: 24px;
+        }
+
+        .helper {
+            font-size: 14px;
+            font-style: italic;
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
+
+        /* Textarea */
+        .textarea-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 18px 24px;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #ffffff;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #ffffff;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .char-count {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 12px;
+            opacity: 0.4;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 20px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .option input {
+            display: none;
+        }
+
+        .option-box {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            position: relative;
+            margin-top: 2px;
+        }
+
+        .option input[type="radio"] + .option-box {
+            border-radius: 50%;
+        }
+
+        .option input:checked + .option-box {
+            background: #ffffff;
+            border-color: #ffffff;
+        }
+
+        .option input:checked + .option-box::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #000000;
+            border-radius: 2px;
+        }
+
+        .option input[type="radio"]:checked + .option-box::after {
+            border-radius: 50%;
+        }
+
+        .option-label {
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        /* Scale */
+        .scale {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .scale-btn {
+            flex: 1;
+            padding: 16px 8px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .scale-btn:hover {
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scale-btn.selected {
+            background: #ffffff;
+            border-color: #ffffff;
+            color: #000000;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 16px;
+            margin-top: auto;
+            padding-top: 30px;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #000000;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-back {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-back:hover {
+            border-color: #ffffff;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Thank you */
+        .thankyou-text {
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.7;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .cta-text {
+            font-size: 15px;
+            opacity: 0.7;
+            margin-bottom: 24px;
+        }
+
+        .duo-info {
+            margin-bottom: 40px;
+        }
+
+        .duo-logo {
+            display: block;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .duo-desc {
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .link:hover {
+            opacity: 1;
+        }
+
+        /* Logo small */
+        .logo-small {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+        }
+
+        .logo-small span {
+            font-size: 20px;
+            font-weight: 700;
+            opacity: 0.5;
+        }
+
+        /* Progress */
+        .progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+
+        .progress.visible {
+            opacity: 1;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #ffffff;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            opacity: 0.6;
+            min-width: 35px;
+            text-align: right;
+        }
+
+        /* Preview controls */
+        .preview-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+        }
+
+        .preview-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .preview-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 20px;
+                padding-bottom: 100px;
+            }
+
+            .title {
+                font-size: 28px;
+            }
+
+            .question-text {
+                font-size: 22px;
+            }
+
+            .scale {
+                flex-wrap: wrap;
+            }
+
+            .scale-btn {
+                flex: 0 0 calc(20% - 8px);
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .links {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="background">
+        <div class="overlay"></div>
+    </div>
+
+    <!-- Preview controls -->
+    <div class="preview-controls">
+        <button class="preview-btn" onclick="prevScreen()">Prev</button>
+        <button class="preview-btn" onclick="nextScreen()">Next</button>
+        <span style="color: #fff; font-size: 12px; padding: 8px;" id="screen-indicator">1/11</span>
+    </div>
+
+    <!-- Main container -->
+    <main class="container">
+
+        <!-- SCREEN 1: Intro -->
+        <section class="screen active" data-index="0">
+            <div class="content">
+                <h1 class="title">Czesc, Kamil!</h1>
+                <p class="subtitle">
+                    Projekt <strong>Visual Identity</strong> wlasnie wyladowal w swiecie.
+                    Mamy nadzieje, ze daje Ci kompas do dalszych decyzji wizualnych.
+                </p>
+                <p class="subtitle">
+                    Mamy dla Ciebie krotki formularz z pytaniami o wspolprace.<br>
+                    Zajmie ~5 minut. Twoje odpowiedzi pomagaja nam rosnac.
+                </p>
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="nextScreen()">Zaczynam</button>
+                </div>
+            </div>
+            <div class="logo-small">
+                <span>Duo.</span>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: Q1 -->
+        <section class="screen" data-index="1">
+            <div class="question-header">
+                <span class="question-number">1 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Co bylo glownym wyzwaniem przed startem wspolpracy?</h2>
+                <div class="textarea-wrapper">
+                    <textarea placeholder="Np. Mialem muzyke, ale zero wizualnej spojnosci..."></textarea>
+                    <div class="char-count">0 / 1000</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: Q2 -->
+        <section class="screen" data-index="2">
+            <div class="question-header">
+                <span class="question-number">2 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Co najbardziej Cie zaskoczylo w procesie?</h2>
+                <div class="textarea-wrapper">
+                    <textarea placeholder="Np. Nie spodziwalem sie ze research phase bedzie tak gleboka..."></textarea>
+                    <div class="char-count">0 / 1000</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: Q3 -->
+        <section class="screen" data-index="3">
+            <div class="question-header">
+                <span class="question-number">3 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Jak zmienilo sie Twoje podejscie do komunikacji/marki po projekcie?</h2>
+                <div class="textarea-wrapper">
+                    <textarea placeholder="Np. Teraz mam kompas - wiem co pasuje a co nie..."></textarea>
+                    <div class="char-count">0 / 1000</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 5: Q4 -->
+        <section class="screen" data-index="4">
+            <div class="question-header">
+                <span class="question-number">4 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Co dzialalo mega dobrze?</h2>
+                <div class="options">
+                    <label class="option">
+                        <input type="checkbox">
+                        <span class="option-box"></span>
+                        <span class="option-label">Komunikacja (szybkosc, clarity, dostepnosc)</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox">
+                        <span class="option-box"></span>
+                        <span class="option-label">Research phase (zrozumienie kontekstu, insighty)</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox">
+                        <span class="option-box"></span>
+                        <span class="option-label">Kreatywnosc (rozwiazania, pomysly)</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox">
+                        <span class="option-box"></span>
+                        <span class="option-label">Proces (timeline, milestones, przejrzystosc)</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox">
+                        <span class="option-box"></span>
+                        <span class="option-label">Deliverables (jakosc, attention to detail)</span>
+                    </label>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 6: Q5 -->
+        <section class="screen" data-index="5">
+            <div class="question-header">
+                <span class="question-number">5 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Co moglismy zrobic lepiej?</h2>
+                <p class="helper">Brutal honesty welcome - chcemy rosnac.</p>
+                <div class="textarea-wrapper">
+                    <textarea></textarea>
+                    <div class="char-count">0 / 1000</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 7: Q6 Rating -->
+        <section class="screen" data-index="6">
+            <div class="question-header">
+                <span class="question-number">6 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Jak ocenilbys wspolprace ogolnie?</h2>
+                <div class="scale">
+                    <button class="scale-btn" onclick="selectScale(this)">1</button>
+                    <button class="scale-btn" onclick="selectScale(this)">2</button>
+                    <button class="scale-btn" onclick="selectScale(this)">3</button>
+                    <button class="scale-btn" onclick="selectScale(this)">4</button>
+                    <button class="scale-btn" onclick="selectScale(this)">5</button>
+                    <button class="scale-btn" onclick="selectScale(this)">6</button>
+                    <button class="scale-btn" onclick="selectScale(this)">7</button>
+                    <button class="scale-btn" onclick="selectScale(this)">8</button>
+                    <button class="scale-btn selected" onclick="selectScale(this)">9</button>
+                    <button class="scale-btn" onclick="selectScale(this)">10</button>
+                </div>
+                <div class="scale-labels">
+                    <span>Slabo</span>
+                    <span>Swietnie</span>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 8: Q6 Reason -->
+        <section class="screen" data-index="7">
+            <div class="question-header">
+                <span class="question-number">7 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Dlaczego ta ocena?</h2>
+                <div class="textarea-wrapper">
+                    <textarea></textarea>
+                    <div class="char-count">0 / 1000</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 9: Q7 Testimonial -->
+        <section class="screen" data-index="8">
+            <div class="question-header">
+                <span class="question-number">8 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Czy mozemy uzyc Twoich odpowiedzi jako referencje?</h2>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="testimonial">
+                        <span class="option-box"></span>
+                        <span class="option-label">Tak, mozecie uzyc moich odpowiedzi publicznie (imie + projekt)</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="testimonial">
+                        <span class="option-box"></span>
+                        <span class="option-label">Tak, ale anonimowo (bez imienia)</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="testimonial" checked>
+                        <span class="option-box"></span>
+                        <span class="option-label">Tylko wewnetrznie (feedback dla was, nie do publicznego uzycia)</span>
+                    </label>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Dalej &rarr;</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 10: Q8+Q9 -->
+        <section class="screen" data-index="9">
+            <div class="question-header">
+                <span class="question-number">9 / 9</span>
+            </div>
+            <div class="content">
+                <h2 class="question-text">Na koniec...</h2>
+
+                <div style="margin-bottom: 30px;">
+                    <label style="display: block; font-size: 18px; font-weight: 500; margin-bottom: 8px;">
+                        Czy znasz kogos kto moglby potrzebowac podobnego wsparcia?
+                    </label>
+                    <p class="helper">Jesli znasz muzyka/artyste/organizacje ktorzy walcza z visual identity - chetnie ich poznamy.</p>
+                    <div class="textarea-wrapper">
+                        <textarea rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 18px; font-weight: 500; margin-bottom: 12px;">
+                        Czy chcialbys zostac w kontakcie?
+                    </label>
+                    <div class="options">
+                        <label class="option">
+                            <input type="checkbox">
+                            <span class="option-box"></span>
+                            <span class="option-label">Newsletter (insights o brandingu dla tworcow)</span>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox">
+                            <span class="option-box"></span>
+                            <span class="option-label">Exclusive updates (nasze nowe projekty, behind the scenes)</span>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox">
+                            <span class="option-box"></span>
+                            <span class="option-label">Invite do Meet Me dinners</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-back" onclick="prevScreen()">&larr; Wstecz</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Wyslij</button>
+            </div>
+        </section>
+
+        <!-- SCREEN 11: Thank You -->
+        <section class="screen" data-index="10">
+            <div class="content">
+                <h1 class="title">Dzieki za szczerosc.</h1>
+                <p class="thankyou-text">
+                    Twoje odpowiedzi sa w pelni anonimowe. Wykorzystamy je w projekcie kreatywnym,
+                    ktory bada stosunek ludzi do tworzenia marek - jak sie w nich kreujemy,
+                    co ukrywamy i co nas w tym wszystkim najbardziej meczy.
+                </p>
+
+                <div class="divider"></div>
+
+                <p class="cta-text">Chcesz dowiedziec sie wiecej o tym, co robimy?</p>
+
+                <div class="duo-info">
+                    <span class="duo-logo">Duo.</span>
+                    <p class="duo-desc">
+                        Duo. - tworzymy wizerunki artystyczne dla tworcow i kampanie dla marek,
+                        ktore stawiaja na autentycznosc.
+                    </p>
+                </div>
+
+                <div class="links">
+                    <a href="#" class="link">Strona glowna</a>
+                    <a href="#" class="link">Instagram</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress bar -->
+        <div class="progress visible" id="progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+            <span class="progress-text" id="progress-text">0%</span>
+        </div>
+
+    </main>
+
+    <script>
+        let currentIndex = 0;
+        const totalScreens = 11;
+        const totalQuestions = 9;
+
+        function showScreen(index) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(s => s.classList.remove('active'));
+            screens[index].classList.add('active');
+            currentIndex = index;
+
+            // Update progress
+            const progress = document.getElementById('progress');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+
+            if (index === 0 || index === totalScreens - 1) {
+                progress.classList.remove('visible');
+            } else {
+                progress.classList.add('visible');
+                const percent = Math.round((index / totalQuestions) * 100);
+                progressFill.style.width = percent + '%';
+                progressText.textContent = percent + '%';
+            }
+
+            // Update indicator
+            document.getElementById('screen-indicator').textContent = (index + 1) + '/' + totalScreens;
+        }
+
+        function nextScreen() {
+            if (currentIndex < totalScreens - 1) {
+                showScreen(currentIndex + 1);
+            }
+        }
+
+        function prevScreen() {
+            if (currentIndex > 0) {
+                showScreen(currentIndex - 1);
+            }
+        }
+
+        function selectScale(btn) {
+            const container = btn.parentElement;
+            container.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        // Initialize
+        showScreen(0);
+    </script>
+</body>
+</html>
