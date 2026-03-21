@@ -45,7 +45,8 @@ $stages = array(
     <title>Social Media Confessions - <?php bloginfo('name'); ?></title>
     <?php wp_head(); ?>
 </head>
-<body class="ankieta-page">
+<body <?php body_class('ankieta-page'); ?>>
+<?php wp_body_open(); ?>
 
     <!-- Tło -->
     <div class="ankieta-background">

@@ -239,8 +239,8 @@ body {
    ANKIETA - Social Media Confessions (clean version)
    ============================================================================ */
 
-/* Reset dla buttonów w ankiecie */
-.ankieta-page button {
+/* Reset dla buttonów w ankiecie (wykluczamy boxy pytań) */
+.ankieta-page button:not(.ankieta-question-box) {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
