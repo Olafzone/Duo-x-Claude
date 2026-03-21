@@ -239,8 +239,8 @@ body {
    ANKIETA - Social Media Confessions (clean version)
    ============================================================================ */
 
-/* Reset dla buttonów w ankiecie (wykluczamy boxy pytań) */
-.ankieta-page button:not(.ankieta-question-box) {
+/* Reset dla buttonów w ankiecie */
+.ankieta-page button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -360,14 +360,18 @@ body {
 }
 
 .ankieta-page .ankieta-question-box {
+    /* Pełny reset + style */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     padding: 18px 24px;
-    background: transparent;
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
     border-radius: 6px;
     text-align: left;
     transition: all 0.2s ease;
     color: #ffffff;
+    cursor: pointer;
 }
 
 .ankieta-page .ankieta-question-box:hover {
