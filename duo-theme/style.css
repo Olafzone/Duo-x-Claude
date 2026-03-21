@@ -359,31 +359,33 @@ body {
     gap: 16px;
 }
 
-.ankieta-question-box {
+.ankieta-page .ankieta-question-box {
     padding: 18px 24px;
     background: transparent;
+    background-color: transparent;
     border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: 6px;
     text-align: left;
     transition: all 0.2s ease;
+    color: #ffffff;
 }
 
-.ankieta-question-box:hover {
+.ankieta-page .ankieta-question-box:hover {
     border-color: #ffffff;
     background: rgba(255, 255, 255, 0.05);
 }
 
-.ankieta-question-box.selected {
+.ankieta-page .ankieta-question-box.selected {
     border-color: #ffffff;
     background: rgba(255, 255, 255, 0.1);
 }
 
-.ankieta-question-box.rejected {
+.ankieta-page .ankieta-question-box.rejected {
     opacity: 0.3;
     pointer-events: none;
 }
 
-.ankieta-box-text {
+.ankieta-page .ankieta-box-text {
     font-size: 15px;
     font-weight: 400;
     line-height: 1.5;
